@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handmade Blooms | Everlasting Crochet Flowers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --rose: #c9736a; --green: #5a7a5a; --cream: #faf6f0; --text: #2d1f14; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); margin: 0; }
+        
+        /* Header */
+        nav { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; sticky: top; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--rose); font-weight: bold; }
+        .cart-btn { background: var(--rose); color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: 500; }
 
+        /* Hero Section */
+        .hero { padding: 60px 5%; text-align: center; background: linear-gradient(to bottom, #fff, var(--cream)); }
+        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 3rem; margin-bottom: 10px; }
+        .hero p { color: #7a6255; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 40px 5%; }
+        .card { background: white; border-radius: 15px; overflow: hidden; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); }
+        .card-img { width: 100%; height: 300px; object-fit: cover; background: #eee; }
+        .card-info { padding: 20px; }
+        .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; margin: 0; }
+        .card-price { color: var(--rose); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
+        .add-to-cart { width: 100%; background: none; border: 1.5px solid var(--rose); color: var(--rose); padding: 10px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .add-to-cart:hover { background: var(--rose); color: white; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; background: #2d1f14; color: white; margin-top: 50px; }
+        
+        /* Toast Notification */
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 12px 25px; border-radius: 30px; display: none; z-index: 1000; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Handmade Blooms</div>
+    <button class="cart-btn" onclick="checkout()">Order on WhatsApp (<span id="count">0</span>)</button>
+</nav>
+
+<section class="hero">
+    <h1>Flowers that <em>never</em> fade</h1>
+    <p>Hand-crocheted with love. The perfect gift for birthdays, anniversaries, or your own home decor.</p>
+</section>
+
+<div class="grid" id="product-grid"></div>
+
+<footer>
+    <p>© 2024 Handmade Blooms | Bringing joy, one stitch at a time.</p>
+</footer>
+
+<div id="toast">Added to cart!</div>
+
+<script>
+    // 1. EASY TO EDIT PRODUCT LIST
+    const products = [
+        { id: 1, name: "Yellow Rose in Pot", price: 250 },
+        { id: 2, name: "Red Rose in Pot", price: 280 },
+        { id: 3, name: "Sunflower in Pot", price: 220 },
+        { id: 4, name: "White Rose (Stem)", price: 180 },
+        { id: 5, name: "Cream Pom Flower (Stem)", price: 150 },
+        { id: 6, name: "Large Sunflower (Stem)", price: 300 }
+    ];
+
+    let cart = [];
+
+    // 2. GENERATE WEBSITE CONTENT AUTOMATICALLY
+    const grid = document.getElementById('product-grid');
+    products.forEach(p => {
+        grid.innerHTML += `
+            <div class="card">
+                <div class="card-img" style="background-color:#f4f4f4; display:flex; align-items:center; justify-content:center; color:#ccc;">Product Image</div>
+                <div class="card-info">
+                    <h3 class="card-title">${p.name}</h3>
+                    <div class="card-price">₹${p.price}</div>
+                    <button class="add-to-cart" onclick="addToCart(${p.id})">Add to Order</button>
+                </div>
+            </div>
+        `;
+    });
+
+    function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        cart.push(product);
+        document.getElementById('count').innerText = cart.length;
+        
+        // Show Toast
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2000);
+    }
+
+    function checkout() {
+        if (cart.length === 0) return alert("Your cart is empty!");
+        
+        let message = "Hello! I want to order:%0A";
+        let total = 0;
+        cart.forEach(item => {
+            message += `- ${item.name} (₹${item.price})%0A`;
+            total += item.price;
+        });
+        message += `%0ATotal: ₹${total}`;
+        
+        // WhatsApp Link (Replace with your number)
+        window.open(`https://wa.me/?text=${message}`, '_blank');
+    }
+</script>
+</body>
+</html>
